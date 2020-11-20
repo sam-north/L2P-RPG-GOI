@@ -1,0 +1,19 @@
+-text based
+-1 player character 
+-stats 
+    -(hp)
+    -xp
+    -level (1-10)
+-classes (limit to 3,   fight, range, wizard)
+-leveling (1-10)
+    -xp
+-mobs
+    -randos
+    -named (certain places)
+-saving
+
+
+Detailed
+    -secondary stats (mana, energy, attack, intellect, )
+    -equipment
+
