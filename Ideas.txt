@@ -9,7 +9,7 @@
     -xp
 -mobs
     -randos
-    -named (certain places)
+    -named (certain places (bosses))
 -saving
 
 
@@ -17,3 +17,27 @@ Detailed
     -secondary stats (mana, energy, attack, intellect, )
     -equipment
 
+
+
+
+
+
+
+
+Combat
+    -spawn random Enemy object
+        -level (random based off player level)
+        -health (probably based on level)
+        -player experience gained when enemy is defeated (probably based on level and/or health)
+        -strength (random)
+        -accuracy (random)
+
+    -turn based (enemy, player, enemy, player, etc)
+        -player options
+            -attack
+            -item
+            -Flee
+        -enemy options
+            -attack
+        
+        when HP gets to zero.  lose/win

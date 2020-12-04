@@ -1,35 +1,74 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace L2P_RPG_GOI
 {
     class Program
     {
-        static string WorldName = "Ghrothban";
+        static string WorldName = "Walker High";
+        static Player player;
+        static Enemy enemy;
+        static bool itIsThePlayersTurn;
         static void Main(string[] args)
         {
             //welcome (cool ascii art)
             Welcome();
             //menu
             Menu();
-                //create a character
+            //create a character
+            while (player.CurrentHealth > 0)
+                Fight();
+        }
+
+        private static void Fight()
+        {
+            enemy = new Enemy(player.Level);
+            itIsThePlayersTurn = false;
+            while (player.CurrentHealth > 0 && enemy.CurrentHealth > 0)
+            {
+                if (itIsThePlayersTurn)
+                    PlayerTurn();
+                else
+                    EnemyTurn();
+
+                itIsThePlayersTurn = !itIsThePlayersTurn;
+            }
+        }
+
+        private static void PlayerTurn()
+        {
+            throw new NotImplementedException();
+        }
+
+        private static void EnemyTurn()
+        {
+            var random = new Random();
+            var doesHit = random.Next(0, 100);
+            if (doesHit <= enemy.Accuracy)
+            {
+
+            }
+            else
+                Print("Enemy swang and missed");
         }
 
         private static void Welcome()
         {
             Print("Welcome to the game bitch.");
-            Print("///////*******////////");
-            Print("///////****///////////");
-            Print("///////*///***////////");
-            Print("///////*******////////");
-            Print("///////*-----*////////");
-            Print("///////*******////////");
+            Print("/////////*******//////////");
+            Print("///////attempted//////////");
+            Print("/////cool ascii art///////");
+            Print("/////////*here**//////////");
+            Print("/////////*-----*//////////");
+            Print("/////////*******//////////");
         }
 
         private static void Menu()
         {
-            var player = new Player();
+            player = new Player();
             player.Name = Prompt("What is your name?");
-            player.Class = Prompt("What class are you?  (Warrior, Archer, Mage)");
+            player.Class = Prompt("What class are you? (Warrior, Archer, Mage)", new List<string> { "Warrior", "Archer", "Mage" });
+            Print("");
 
             Print($"Welcome to {WorldName} fellow {player.Name}");
             Print($"We have not had a {player.Class} at {WorldName} since the year 2019. Before the storm...of covid");
@@ -39,7 +78,7 @@ namespace L2P_RPG_GOI
 
             Print("");
             Print($"Congratulations.  You have created your character.  Enjoy the world of {WorldName}.");
-            Print($"Health: {player.Health}, Experience: {player.ExperiencePoints}, Level: {player.Level}");
+            Print($"Health: {player.MaxHealth}, Experience: {player.ExperiencePoints}, Level: {player.Level}");
         }
 
         private static string Prompt(string promptThis)
@@ -54,6 +93,17 @@ namespace L2P_RPG_GOI
                 input = Console.ReadLine();
             }
             //return the something
+            return input;
+        }
+
+        private static string Prompt(string promptThis, List<string> expectedResponses)
+        {
+            var input = Prompt(promptThis);
+
+            while (!expectedResponses.Contains(input))
+            {
+                input = Prompt($"Choose from: {string.Join(",", expectedResponses)}");
+            }
             return input;
         }
 
