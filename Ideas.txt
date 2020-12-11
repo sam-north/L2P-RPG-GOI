@@ -37,7 +37,10 @@ Combat
             -attack
             -item
             -Flee
+            -guard (no attack.  heal 10%)
         -enemy options
             -attack
         
         when HP gets to zero.  lose/win
+
+
