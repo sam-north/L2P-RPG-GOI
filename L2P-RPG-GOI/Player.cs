@@ -10,7 +10,7 @@ namespace L2P_RPG_GOI
             CurrentHealth = MaxHealth;
 
             var random = new Random();
-            Strength = random.Next(0, 101);
+            Strength = random.Next(1, 101);
             Dexterity = random.Next(0, 101);
             Intellect = random.Next(0, 101);
         }

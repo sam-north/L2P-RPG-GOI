@@ -9,6 +9,8 @@ namespace L2P_RPG_GOI
         static Player player;
         static Enemy enemy;
         static bool itIsThePlayersTurn;
+        static bool playerFlee = false;
+        static bool guardMitigated = false;
         static void Main(string[] args)
         {
             //welcome (cool ascii art)
@@ -22,13 +24,14 @@ namespace L2P_RPG_GOI
 
         private static void StartFight()
         {
+            playerFlee = false;
             Print($"Ready... Fight!");
             enemy = new Enemy(player.Level);
             Print($"A wild {enemy.Type} appears!");
             Print($"Enemy Accuracy-{enemy.Accuracy}%, Strength-{enemy.Strength}, Level-{enemy.Level}, ExperienceAwardedOnDeath-{enemy.ExperienceAwardedOnDeath} ");
             Console.ReadLine();
             itIsThePlayersTurn = false;
-            while (player.CurrentHealth > 0 && enemy.CurrentHealth > 0)
+            while (player.CurrentHealth > 0 && enemy.CurrentHealth > 0 && !playerFlee)
             {
                 if (itIsThePlayersTurn)
                     PlayerTurn();
@@ -47,10 +50,55 @@ namespace L2P_RPG_GOI
                 Print($"{ fucked }");
                 Console.ResetColor();
             }
+            if (enemy.CurrentHealth < 1)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Print($"You killed the { enemy.Type }!  Grats bro!");
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Print($"You gained {enemy.ExperienceAwardedOnDeath} experience!");
+                player.ExperiencePoints = player.ExperiencePoints + enemy.ExperienceAwardedOnDeath;
+                Print($"You are level {player.Level} and have {player.ExperiencePoints} experience!");
+                Console.ResetColor();
+            }
         }
 
         private static void PlayerTurn()
         {
+            Print($"");
+            var action = Prompt($"It's your turn!  What would you like to do sir or madam {player.Class}? (1.) (A)ttack, 2.) (G)uard, 3.) (F)lee)", new List<string> { "Attack", "Guard", "Flee", "1", "2", "3", "A", "G", "F" });
+
+            if (action == "F" || action == "Flee" || action == "3")
+            {
+                var random = new Random();
+                var fleeChance = random.Next(0, 99);
+                if (fleeChance < 30)
+                {
+                    playerFlee = true;
+                    Print($"You fled cuz you a bitch.");
+                }
+                else
+                    Print("You are a pussy bitch and tried to run.  But you are also a failure.  So you failed to flee you failure pussy bitch.");
+            }
+            else if (action == "G" || action == "Guard" || action == "2")
+            {
+                Print($"You guarded!");
+                var healedAmount = (player.MaxHealth / 10);
+                player.CurrentHealth = player.CurrentHealth + healedAmount;
+                if (player.CurrentHealth > player.MaxHealth)
+                    player.CurrentHealth = player.MaxHealth;
+
+                Print($"Your healed {healedAmount}.");
+                Print($"Your current health is {player.CurrentHealth}.");
+
+                guardMitigated = true;
+            }
+            else if (action == "A" || action == "Attack" || action == "1")
+            {
+                int damage = CalculateDamage(player.Strength);
+                enemy.CurrentHealth = enemy.CurrentHealth - damage;
+                Print($"You hit {enemy.Type} for {damage} damage!");
+                Print($"The {enemy.Type}'s current health is {enemy.CurrentHealth}.");
+            }
         }
 
         private static void EnemyTurn()
@@ -61,12 +109,11 @@ namespace L2P_RPG_GOI
             if (doesHit <= enemy.Accuracy)
             {
                 //hit player based off enemy strength
-                var damage = enemy.Strength / random.Next(8, 13);
-                var doesCrit = random.Next(0, 100);
-                if (doesCrit < 20)
+                int damage = CalculateDamage(enemy.Strength);
+                if (guardMitigated)
                 {
-                    damage = damage * 2;
-                    Print($"Critical hit!");
+                    damage = damage / 2;
+                    guardMitigated = false;
                 }
                 player.CurrentHealth = player.CurrentHealth - damage;
                 Print($"{enemy.Type} hit you for {damage} damage!");
@@ -74,6 +121,20 @@ namespace L2P_RPG_GOI
             }
             else
                 Print("Enemy swang and missed");
+        }
+
+        private static int CalculateDamage(int strength)
+        {
+            var random = new Random();
+            var damage = strength / random.Next(8, 13);
+            var doesCrit = random.Next(0, 100);
+            if (doesCrit < 20)
+            {
+                damage = damage * 2;
+                Print($"Critical hit!");
+            }
+
+            return damage;
         }
 
         private static void Welcome()
