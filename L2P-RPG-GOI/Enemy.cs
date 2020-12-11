@@ -9,12 +9,25 @@ namespace L2P_RPG_GOI
         {
             Random random = new Random();
             Level = random.Next(playerLevel - 1, playerLevel + 2);
+            if (Level == 0)
+                Level = 1;
+
             CurrentHealth = MaxHealth;
 
             ExperienceAwardedOnDeath = random.Next(1, Level * 2 + 1);
-            Strength = random.Next(0, 100);
-            Accuracy = random.Next(0, 100);
-            Type = Types[random.Next(0, Types.Count + 1)];
+            Accuracy = random.Next(55, 95);
+
+            var randomTypeIndex = random.Next(0, Types.Count);
+            Type = Types[randomTypeIndex];
+
+            if (Type == "troll")
+                Strength = random.Next(70, 100);
+            else if (Type == "beast")
+                Strength = random.Next(50, 80);
+            else if (Type == "flower")
+                Strength = random.Next(25, 60);
+            else if (Type == "cary")
+                Strength = random.Next(1, 10);
         }
 
         public string Type { get; set; } // ogre, troll, beast
@@ -33,6 +46,6 @@ namespace L2P_RPG_GOI
         public int Strength { get; set; }
         public int Accuracy { get; set; }
 
-        private List<string> Types = new List<string> { "ogre", "troll", "beast", "ben" };
+        private List<string> Types = new List<string> { "troll", "beast", "flower", "cary" };
     }
 }

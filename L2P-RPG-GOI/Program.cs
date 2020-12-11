@@ -17,12 +17,16 @@ namespace L2P_RPG_GOI
             Menu();
             //create a character
             while (player.CurrentHealth > 0)
-                Fight();
+                StartFight();
         }
 
-        private static void Fight()
+        private static void StartFight()
         {
+            Print($"Ready... Fight!");
             enemy = new Enemy(player.Level);
+            Print($"A wild {enemy.Type} appears!");
+            Print($"Enemy Accuracy-{enemy.Accuracy}%, Strength-{enemy.Strength}, Level-{enemy.Level}, ExperienceAwardedOnDeath-{enemy.ExperienceAwardedOnDeath} ");
+            Console.ReadLine();
             itIsThePlayersTurn = false;
             while (player.CurrentHealth > 0 && enemy.CurrentHealth > 0)
             {
@@ -33,20 +37,40 @@ namespace L2P_RPG_GOI
 
                 itIsThePlayersTurn = !itIsThePlayersTurn;
             }
+            //check for dead
+            if (player.CurrentHealth < 1)
+            {
+                var deathPhrases = new List<string> { "YOU DIED", "WASTED", "UNINSTALL", "GIT GUD", "ADIOS MUCHACHO", "ZAK SUX NVR 4 GIT" };
+                var random = new Random();
+                var fucked = deathPhrases[random.Next(0, deathPhrases.Count)];
+                Console.ForegroundColor = ConsoleColor.Red;
+                Print($"{ fucked }");
+                Console.ResetColor();
+            }
         }
 
         private static void PlayerTurn()
         {
-            throw new NotImplementedException();
         }
 
         private static void EnemyTurn()
         {
+            Print($"");
             var random = new Random();
             var doesHit = random.Next(0, 100);
             if (doesHit <= enemy.Accuracy)
             {
-
+                //hit player based off enemy strength
+                var damage = enemy.Strength / random.Next(8, 13);
+                var doesCrit = random.Next(0, 100);
+                if (doesCrit < 20)
+                {
+                    damage = damage * 2;
+                    Print($"Critical hit!");
+                }
+                player.CurrentHealth = player.CurrentHealth - damage;
+                Print($"{enemy.Type} hit you for {damage} damage!");
+                Print($"Your current health is {player.CurrentHealth}.");
             }
             else
                 Print("Enemy swang and missed");
