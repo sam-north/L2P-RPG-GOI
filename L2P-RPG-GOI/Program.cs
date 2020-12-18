@@ -98,6 +98,20 @@ namespace L2P_RPG_GOI
                 enemy.CurrentHealth = enemy.CurrentHealth - damage;
                 Print($"You hit {enemy.Type} for {damage} damage!");
                 Print($"The {enemy.Type}'s current health is {enemy.CurrentHealth}.");
+                  var random = new Random();
+                var stunChance = random.Next(0, 99);
+                if (stunChance > 70)
+                {
+                    Print($"Well Done! The {enemy.Type} is stunned! You have a perfect chance to smack the shit out of it, again!");
+                    var roll = Prompt($"Press any key to roll a 20 sided die to determine the damage on the stunned {enemy.Type}.");
+                    if (roll != null)
+                    {
+                        int stunDamage = random.Next(1, 20);
+                        enemy.CurrentHealth = enemy.CurrentHealth - stunDamage;
+                        Print($"While it was stunned you smacked that {enemy.Type} for {stunDamage} damage!");
+                        Print($"The {enemy.Type}'s current health is {enemy.CurrentHealth}.");
+                    }
+                }
             }
         }
 
