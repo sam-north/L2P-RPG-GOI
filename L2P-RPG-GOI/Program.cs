@@ -5,7 +5,7 @@ namespace L2P_RPG_GOI
 {
     class Program
     {
-        static string WorldName = "Walker High";
+        static string WorldName = "Dagnaros";
         static Player player;
         static Enemy enemy;
         static bool itIsThePlayersTurn;
@@ -65,7 +65,7 @@ namespace L2P_RPG_GOI
         private static void PlayerTurn()
         {
             Print($"");
-            var action = Prompt($"It's your turn!  What would you like to do sir or madam {player.Class}? (1.) (A)ttack, 2.) (G)uard, 3.) (F)lee)", new List<string> { "Attack", "Guard", "Flee", "1", "2", "3", "A", "G", "F" });
+            var action = Prompt($"It's your turn!  What would you like to do sir or madam {player.Class.Name}? (1.) (A)ttack, 2.) (G)uard, 3.) (F)lee)", new List<string> { "Attack", "Guard", "Flee", "1", "2", "3", "A", "G", "F" });
 
             if (action == "F" || action == "Flee" || action == "3")
             {
@@ -94,11 +94,35 @@ namespace L2P_RPG_GOI
             }
             else if (action == "A" || action == "Attack" || action == "1")
             {
-                int damage = CalculateDamage(player.Strength);
+                //choose attack (based on your attacks available)
+                var playerAttackNames = new List<string>();
+                for (int i = 0; i < player.Class.Attacks.Count; i++)
+                    playerAttackNames.Add(player.Class.Attacks[i].Name);
+
+
+                var attackChoiceString = Prompt(string.Join(",", playerAttackNames), playerAttackNames);
+                //calculate damage based on the attack and some stats related to the player class
+                Attack attackChosen = null;
+                foreach (var attack in player.Class.Attacks)
+                {
+                    if (attack.Name == attackChoiceString)
+                    {
+                        attackChosen = attack;
+                        break;
+                    }
+                }
+                int modifier = 0;
+                if (player.Class.Name == "Warrior") modifier = player.Strength;
+                else if (player.Class.Name == "Archer") modifier = player.Dexterity;
+                else if (player.Class.Name == "Mage") modifier = player.Intellect;
+
+                int damage = attackChosen.DoDamage(modifier);
+
+
                 enemy.CurrentHealth = enemy.CurrentHealth - damage;
                 Print($"You hit {enemy.Type} for {damage} damage!");
                 Print($"The {enemy.Type}'s current health is {enemy.CurrentHealth}.");
-                  var random = new Random();
+                var random = new Random();
                 var stunChance = random.Next(0, 99);
                 if (stunChance > 70)
                 {
@@ -106,7 +130,7 @@ namespace L2P_RPG_GOI
                     var roll = Prompt($"Press any key to roll a 20 sided die to determine the damage on the stunned {enemy.Type}.");
                     if (roll != null)
                     {
-                        int stunDamage = random.Next(1, 20);
+                        int stunDamage = random.Next(1, 21);
                         enemy.CurrentHealth = enemy.CurrentHealth - stunDamage;
                         Print($"While it was stunned you smacked that {enemy.Type} for {stunDamage} damage!");
                         Print($"The {enemy.Type}'s current health is {enemy.CurrentHealth}.");
@@ -164,13 +188,14 @@ namespace L2P_RPG_GOI
 
         private static void Menu()
         {
-            player = new Player();
-            player.Name = Prompt("What is your name?");
-            player.Class = Prompt("What class are you? (Warrior, Archer, Mage)", new List<string> { "Warrior", "Archer", "Mage" });
+            var playerName = Prompt("What is your name?");
+            var playerClass = Prompt("What class are you? (Warrior, Archer, Mage)", new List<string> { "Warrior", "Archer", "Mage" });
             Print("");
 
+            player = new Player(playerName, playerClass);
+
             Print($"Welcome to {WorldName} fellow {player.Name}");
-            Print($"We have not had a {player.Class} at {WorldName} since the year 2019. Before the storm...of covid");
+            Print($"We have not had a {player.Class.Name} at {WorldName} since the year 2019. Before the storm...of covid");
             Print($"Oh MY!  Look at how strong you are! ******** Strength: {player.Strength}.");
             Print($"Little dexterious dick bro are you! ******** Dexterity: {player.Dexterity}.");
             Print($"You are sooooo smart!........       ******** Intellect: {player.Intellect}.");

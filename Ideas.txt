@@ -1,3 +1,15 @@
+NEXT TO DO LIST STUFF AT THE TOP.  AFTER DOING IT.  MOVE IT DOWN
+
+-need to consider action points (make abilities subtract from player.  add ability to regenerate action points)
+-regen action points
+-weapons 
+-modify guard to make it take more than 1 attack and regen action points  OR a new action ability that does nothing but regen action points
+-make guard/defensive/passive ability things class specific
+-items
+-database
+
+-types of attacking.
+
 -text based
 -1 player character 
 -stats 
@@ -18,12 +30,6 @@ Detailed
     -equipment
 
 
-
-
-
-
-
-
 Combat
     -spawn random Enemy object
         -level (random based off player level)
@@ -42,5 +48,7 @@ Combat
             -attack
         
         when HP gets to zero.  lose/win
+
+
 
 
