@@ -1,17 +1,58 @@
-﻿using System;
+﻿using Discord;
+using Discord.Commands;
+using Discord.WebSocket;
+using L2P_RPG_GOI.Discord.Handlers;
+using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace L2P_RPG_GOI
 {
     class Program
     {
+        private CommandHandler _commandHandler;
+        private DiscordSocketClient _client;
+
+
         static string WorldName = "Dagnaros";
         static Player player;
         static Enemy enemy;
         static bool itIsThePlayersTurn;
         static bool playerFlee = false;
         static bool guardMitigated = false;
-        static void Main(string[] args)
+        public static void Main(string[] args) => new Program().MainAsync().GetAwaiter().GetResult();
+
+        public async Task MainAsync()
+        {
+            _client = new DiscordSocketClient();
+            using (var commandService = new CommandService())
+            {
+
+                _client.Log += Log;
+
+                //  You can assign your bot token to a string, and pass that in to connect.
+                //  This is, however, insecure, particularly if you plan to have your code hosted in a public repository.
+                //var token = "token";
+
+                // Some alternative options would be to keep your token in an Environment Variable or a standalone file.
+                var token = Environment.GetEnvironmentVariable("L2PBotToken");
+                if (string.IsNullOrWhiteSpace(token))
+                    throw new Exception("You don't have a L2PBotToken Environment Variable.");
+                // var token = File.ReadAllText("token.txt");
+                // var token = JsonConvert.DeserializeObject<AConfigurationClass>(File.ReadAllText("config.json")).Token;
+
+                await _client.LoginAsync(TokenType.Bot, token);
+                await _client.StartAsync();
+
+
+                _commandHandler = new CommandHandler(_client, commandService);
+                await _commandHandler.InstallCommandsAsync();
+                // Block this task until the program is closed.
+                await Task.Delay(-1);
+            }
+        }
+
+        private static void Game()
         {
             //welcome (cool ascii art)
             Welcome();
@@ -20,6 +61,12 @@ namespace L2P_RPG_GOI
             //create a character
             while (player.CurrentHealth > 0)
                 StartFight();
+        }
+
+        private Task Log(LogMessage msg)
+        {
+            Console.WriteLine(msg.ToString());
+            return Task.CompletedTask;
         }
 
         private static void StartFight()
