@@ -1,13 +1,31 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace L2P_RPG_GOI
 {
+    [Table("Player")]
     public class Player
     {
+        public Player()
+        {
+        }
+
         public Player(string name, string playerClass)
         {
             Name = name;
             Class = new Class(playerClass);
+            InitializeStats();
+        }
+        public Player(string name, Class playerClass)
+        {
+            Name = name;
+            Class = playerClass;
+            InitializeStats();
+        }
+
+        private void InitializeStats()
+        {
             ExperiencePoints = 0;
             CurrentHealth = MaxHealth;
             ActionPoints = 10;
@@ -33,8 +51,8 @@ namespace L2P_RPG_GOI
             }
         }
 
-        public string HairColor { get; set; } //syntactic sugar (easier to type and shit)
-
+        [Key]
+        public int Id { get; set; }
         public string Name { get; set; }
         public Class Class { get; set; }
         public int ExperiencePoints { get; set; }

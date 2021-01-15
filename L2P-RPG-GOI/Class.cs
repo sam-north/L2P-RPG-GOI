@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace L2P_RPG_GOI
 {
+    [Table("Class")]
     public class Class
     {
         public Class(string name)
@@ -64,8 +67,11 @@ namespace L2P_RPG_GOI
             }
         }
 
-
+        [Key]
+        public int Id { get; set; }
         public string Name { get; set; }
+
+        [NotMapped]
         public List<Attack> Attacks { get; set; } = new List<Attack>();
     }
 
