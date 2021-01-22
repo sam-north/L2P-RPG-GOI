@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace L2P_RPG_GOI
+namespace L2P_RPG_GOI.Models
 {
     public class Enemy
     {

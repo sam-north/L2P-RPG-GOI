@@ -1,6 +1,7 @@
 ﻿using Discord.Commands;
 using L2P_RPG_GOI.DataAccess;
 using L2P_RPG_GOI.Helpers;
+using L2P_RPG_GOI.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,13 +23,16 @@ namespace L2P_RPG_GOI.Discord.Modules
             //conntect to the database
             var entityContext = new EntityContext();
 
+            var userHelper = new UserHelper();
+            //var user = userHelper.GetOrCreateUser(Context.User);
+
             //queried for database class entity.
             var databaseClass = entityContext.Classes.Single(x => x.Name == playerClass);
 
             //create our player in code
-            var player = new Player(playerName, databaseClass);
+            var player = new Character(playerName, databaseClass);
             //save our player to the database
-            entityContext.Players.Add(player);
+            entityContext.Characters.Add(player);
             entityContext.SaveChanges();
 
             //gg? message the user with feedback
@@ -50,7 +54,7 @@ namespace L2P_RPG_GOI.Discord.Modules
             var entityContext = new EntityContext();
 
             //query for characters
-            var players = entityContext.Players.ToList();
+            var players = entityContext.Characters.ToList();
 
             //add characters to our message list variable
             foreach (var player in players)

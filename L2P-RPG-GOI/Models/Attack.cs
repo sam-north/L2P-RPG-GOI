@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace L2P_RPG_GOI
+namespace L2P_RPG_GOI.Models
 {
     public class Attack
     {

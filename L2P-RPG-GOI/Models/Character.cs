@@ -2,22 +2,22 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace L2P_RPG_GOI
+namespace L2P_RPG_GOI.Models
 {
-    [Table("Player")]
-    public class Player
+    [Table("Character")]
+    public class Character
     {
-        public Player()
+        public Character()
         {
         }
 
-        public Player(string name, string playerClass)
+        public Character(string name, string playerClass)
         {
             Name = name;
             Class = new Class(playerClass);
             InitializeStats();
         }
-        public Player(string name, Class playerClass)
+        public Character(string name, Class playerClass)
         {
             Name = name;
             Class = playerClass;

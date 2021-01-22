@@ -1,5 +1,6 @@
 ﻿using Discord.Commands;
 using Discord.WebSocket;
+using L2P_RPG_GOI.Helpers;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -52,6 +53,9 @@ namespace L2P_RPG_GOI.Discord.Handlers
             // Create a WebSocket-based command context based on the message
             var context = new SocketCommandContext(_client, message);
 
+            var userHelper = new UserHelper();
+            var userId = userHelper.GetOrCreateUser(context.User);
+            
             // Execute the command with the command context we just
             // created, along with the service provider for precondition checks.
             await _commands.ExecuteAsync(

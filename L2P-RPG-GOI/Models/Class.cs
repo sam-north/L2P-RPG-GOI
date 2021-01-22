@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace L2P_RPG_GOI
+namespace L2P_RPG_GOI.Models
 {
     [Table("Class")]
     public class Class

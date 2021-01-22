@@ -2,6 +2,7 @@
 using Discord.Commands;
 using Discord.WebSocket;
 using L2P_RPG_GOI.Discord.Handlers;
+using L2P_RPG_GOI.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -15,7 +16,7 @@ namespace L2P_RPG_GOI
 
 
         static string WorldName = "Dagnaros";
-        static Player player;
+        static Character player;
         static Enemy enemy;
         static bool itIsThePlayersTurn;
         static bool playerFlee = false;
@@ -239,7 +240,7 @@ namespace L2P_RPG_GOI
             var playerClass = Prompt("What class are you? (Warrior, Archer, Mage)", new List<string> { "Warrior", "Archer", "Mage" });
             Print("");
 
-            player = new Player(playerName, playerClass);
+            player = new Character(playerName, playerClass);
 
             Print($"Welcome to {WorldName} fellow {player.Name}");
             Print($"We have not had a {player.Class.Name} at {WorldName} since the year 2019. Before the storm...of covid");

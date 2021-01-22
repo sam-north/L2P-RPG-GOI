@@ -1,11 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using L2P_RPG_GOI.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace L2P_RPG_GOI.DataAccess
 {
     public class EntityContext : DbContext
     {
-        public DbSet<Player> Players { get; set; }
+        public DbSet<Character> Characters { get; set; }
         public DbSet<Class> Classes { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
