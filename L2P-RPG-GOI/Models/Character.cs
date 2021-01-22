@@ -95,5 +95,7 @@ namespace L2P_RPG_GOI.Models
         public int Dexterity { get; set; }
         public int Intellect { get; set; }
         public int ActionPoints { get; set; }
+
+        public int UserId { get; set; }
     }
 }

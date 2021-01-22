@@ -24,20 +24,27 @@ namespace L2P_RPG_GOI.Discord.Modules
             var entityContext = new EntityContext();
 
             var userHelper = new UserHelper();
-            //var user = userHelper.GetOrCreateUser(Context.User);
+            var user = userHelper.GetOrCreateUser(Context.User);
 
             //queried for database class entity.
-            var databaseClass = entityContext.Classes.Single(x => x.Name == playerClass);
+            var databaseClass = entityContext.Classes.SingleOrDefault(x => x.Name == playerClass);
+            if (databaseClass == null)
+            {
+                messages.Add($"Invalid class specified {user.Username}.");
+                messages.Add("Expecting (Warrior, Archer, Mage)");
+                return ReplyAsync(PrintHelpers.FormatMultipleStringsToMultilineString(messages));
+            }
 
             //create our player in code
-            var player = new Character(playerName, databaseClass);
+            var character = new Character(playerName, databaseClass);
+            character.UserId = user.Id;
             //save our player to the database
-            entityContext.Characters.Add(player);
+            entityContext.Characters.Add(character);
             entityContext.SaveChanges();
 
             //gg? message the user with feedback
-            messages.Add("You created a player!");
-            messages.Add("Your player id is " + player.Id);
+            messages.Add("You created a character!");
+            messages.Add("Your character id is " + character.Id);
 
             var formattedMessage = PrintHelpers.FormatMultipleStringsToMultilineString(messages);
             return ReplyAsync(formattedMessage);

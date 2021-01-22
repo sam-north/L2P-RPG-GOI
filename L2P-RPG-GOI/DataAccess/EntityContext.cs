@@ -7,6 +7,7 @@ namespace L2P_RPG_GOI.DataAccess
     {
         public DbSet<Character> Characters { get; set; }
         public DbSet<Class> Classes { get; set; }
+        public DbSet<MessageAudit> MessageAudits { get; set; }
         public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

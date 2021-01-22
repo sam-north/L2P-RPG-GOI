@@ -54,7 +54,10 @@ namespace L2P_RPG_GOI.Discord.Handlers
             var context = new SocketCommandContext(_client, message);
 
             var userHelper = new UserHelper();
-            var userId = userHelper.GetOrCreateUser(context.User);
+            var user = userHelper.GetOrCreateUser(context.User);
+
+            var messageAuditHelper = new MessageAuditHelper();
+            messageAuditHelper.CreateLog(user.Id, message.Content);
             
             // Execute the command with the command context we just
             // created, along with the service provider for precondition checks.
