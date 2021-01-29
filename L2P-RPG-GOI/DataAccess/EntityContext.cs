@@ -23,7 +23,7 @@ namespace L2P_RPG_GOI.DataAccess
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(
-                @"Server=.\SQL2019;Database=L2P_RPG;Integrated Security=True");
+                @"Server=.\;Database=L2P_RPG;Integrated Security=True");
         }
     }
 }

@@ -73,5 +73,39 @@ namespace L2P_RPG_GOI.Discord.Modules
             var formattedMessage = PrintHelpers.FormatMultipleStringsToMultilineString(messages);
             return ReplyAsync(formattedMessage);
         }
+
+
+        [Command("login")]
+        [Summary("login to character")]
+        public Task Login(string characterName)
+        {
+            //Determine who's logging in.
+            var userHelper = new UserHelper();
+            var user = userHelper.GetOrCreateUser(Context.User);
+            var messages = new List<string>();
+
+            //Check database for character for this user.
+            var entityContext = new EntityContext();
+            var databaseCharacter = entityContext.Characters.SingleOrDefault(u => u.UserId == user.Id && u.Name == characterName);
+            if (databaseCharacter == null)
+            {
+                messages.Add($"You don't have a character named {characterName}, {user.Username}.");
+                messages.Add("Get your shit together.");
+                return ReplyAsync(PrintHelpers.FormatMultipleStringsToMultilineString(messages));
+            }
+            //Set currently active character inactive.
+            var activeCharacter = entityContext.Characters.SingleOrDefault(u => u.UserId == user.Id && u.Active == true);
+            if(activeCharacter != null)
+                activeCharacter.Active = false;
+
+            //Set character to active.
+            databaseCharacter.Active = true;
+            entityContext.SaveChanges();
+            messages.Add($"You are now logged in as {characterName}, {user.Username}.");
+
+            var formattedMessage = PrintHelpers.FormatMultipleStringsToMultilineString(messages);
+            return ReplyAsync(formattedMessage);
+
+        }
     }
 }

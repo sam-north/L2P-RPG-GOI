@@ -97,5 +97,6 @@ namespace L2P_RPG_GOI.Models
         public int ActionPoints { get; set; }
 
         public int UserId { get; set; }
+        public bool Active { get; set; }
     }
 }

@@ -2,7 +2,8 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/L2P-RPG-GOI/bin/Debug/netcoreapp3.1
+
 /L2P-RPG-GOI/obj
 /.vs/L2P-RPG-GOI/v16
 /.vs
+/L2P-RPG-GOI/bin/
