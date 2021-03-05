@@ -7,3 +7,10 @@
 /.vs/L2P-RPG-GOI/v16
 /.vs
 /L2P-RPG-GOI/bin/
+/Database/bin/Debug
+/Database/obj/Debug
+/Database/Import Schema Logs
+/L2P-RPG-GOI/Properties/PublishProfiles
+*.user
+*.jfm
+*.dbmdl

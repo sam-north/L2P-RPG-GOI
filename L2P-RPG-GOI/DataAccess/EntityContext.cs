@@ -1,5 +1,6 @@
 ﻿using L2P_RPG_GOI.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace L2P_RPG_GOI.DataAccess
 {
@@ -22,8 +23,10 @@ namespace L2P_RPG_GOI.DataAccess
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(
-                @"Server=.\;Database=L2P_RPG;Integrated Security=True");
+            var connectionString = Environment.GetEnvironmentVariable("L2PBotConnectionString");
+            if (string.IsNullOrWhiteSpace(connectionString))
+                throw new Exception("You don't have a L2PBotConnectionString Environment Variable.");
+            optionsBuilder.UseSqlServer(connectionString);
         }
     }
 }

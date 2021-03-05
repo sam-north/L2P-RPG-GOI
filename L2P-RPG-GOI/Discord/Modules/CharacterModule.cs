@@ -61,7 +61,9 @@ namespace L2P_RPG_GOI.Discord.Modules
             var entityContext = new EntityContext();
 
             //query for characters
-            var players = entityContext.Characters.ToList();
+            var userHelper = new UserHelper();
+            var user = userHelper.GetOrCreateUser(Context.User);
+            var players = entityContext.Characters.ToList().Where(x => x.UserId == user.Id).ToList();
 
             //add characters to our message list variable
             foreach (var player in players)
@@ -95,7 +97,7 @@ namespace L2P_RPG_GOI.Discord.Modules
             }
             //Set currently active character inactive.
             var activeCharacter = entityContext.Characters.SingleOrDefault(u => u.UserId == user.Id && u.Active == true);
-            if(activeCharacter != null)
+            if (activeCharacter != null)
                 activeCharacter.Active = false;
 
             //Set character to active.
